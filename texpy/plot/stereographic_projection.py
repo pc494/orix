@@ -173,5 +173,19 @@ class StereographicAxes(Axes):
     def can_pan(self):
         return False
 
+    def transform(self, xs):
+        from texpy.quaternion.rotation import Rotation
+        from texpy.vector import Vector3d
+        if isinstance(xs, Rotation):
+            x, y, z = xs.axis.xyz
+        else:
+            x, y, z = Vector3d(xs).unit.xyz
+        phi = np.arcsin(np.sqrt(x ** 2 + y ** 2))
+        theta = np.angle(x + 1j * y)
+        return phi, theta
+
+    def scatter(self, xs, **kwargs):
+        phi, theta = self.transform(xs)
+        super().scatter(phi, theta, **kwargs)
 
 register_projection(StereographicAxes)
