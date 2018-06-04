@@ -177,7 +177,7 @@ class StereographicAxes(Axes):
         from texpy.quaternion.rotation import Rotation
         from texpy.vector import Vector3d
         if isinstance(xs, Rotation):
-            x, y, z = xs.axis.xyz
+            x, y, z = (xs * Vector3d.zvector()).xyz
         else:
             x, y, z = Vector3d(xs).unit.xyz
         phi = np.arcsin(np.sqrt(x ** 2 + y ** 2))

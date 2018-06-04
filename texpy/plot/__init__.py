@@ -1,1 +1,2 @@
-from .rotation_plot import RodriguesPlot
+from .rotation_plot import RodriguesPlot, AxAnglePlot
+from .stereographic_projection import StereographicAxes
