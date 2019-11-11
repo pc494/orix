@@ -19,7 +19,7 @@
 import numpy
 import transforms3d
 
-class Euler(np.array):
+class Euler():
     """
     Class storing rotations as euler angles.
     Each row reads as [alpha,beta,gamma], where alpha, beta and gamma are rotations
@@ -27,6 +27,7 @@ class Euler(np.array):
     as defined in transforms3d, remember that Euler angles are difficult.
     """
     def __init__(self,data,axis_convention='rzxz'):
+        self.data = data
         # check the dimensions
         # check all angles less than 360
         # axis_convention

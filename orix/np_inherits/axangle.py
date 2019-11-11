@@ -18,13 +18,14 @@
 
 import numpy as np
 
-class AxAngle(np.array):
+class AxAngle():
     """
     Class storing rotations in the axis-angle convention. Each row reads
     as [vx,vy,vz,theta], where [vx,vy,vz] is the rotation axis (normalised)
     and theta is the rotation angle in UNITS
     """
     def __init__(self,data):
+        self.data = data
         # check the dimensions
         # normalise
         return None
