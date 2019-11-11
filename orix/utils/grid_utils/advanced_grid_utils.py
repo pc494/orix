@@ -42,6 +42,29 @@ def get_local_grid(center,max_rotation,resolution):
     raw_grid = create_linearly_spaced_array_in_szxz(resolution)
     # convert to AxAngle
     # Remove the big angles
+    # rotate to the center (check this doesn't reduce our volume saving from szxz)
+    # convert to rzxz
+    return None
+
+def get_fundemental_zone_grid(symmetry,resolution,center=(0,0,0)):
+    """
+    Parameters
+    ----------
+
+    symmetry :
+
+
+    resolution : float
+        The 'resolution' of the grid (degrees)
+
+    center : 3 angle tuple
+        The orientation that acts as the center of the grid, specified in the
+        'rzxz' convention (degrees)
+
+        Returns
+    """
+    raw_grid = create_linearly_spaced_array_in_szxz(resolution)
+    # remove non fundemental zone (ideally keeping as much of the final rotation as possible)
     # rotate to the center
     # convert to rzxz
     return None
