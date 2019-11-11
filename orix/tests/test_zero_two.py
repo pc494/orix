@@ -16,21 +16,18 @@
 # You should have received a copy of the GNU General Public License
 # along with orix.  If not, see <http://www.gnu.org/licenses/>.
 
+import pytest
 import numpy as np
-from orix.vector import Vector3d
-from orix.utils.grid_utils.s1grid import S1Grid
 
+from orix.np_inherits.axangle import AxAngle
+from orix.np_inherits.euler import Euler
 
-class S2Grid:
+class TestAxAngle:
+    def test_good_array__init__(self):
+        good_array = np.asarray([1,0,0,1])
+        assert isinstance(AxAngle(good_array),AxAngle)
 
-    theta_grid = None  # type: S1Grid
-    rho_grid = None  # type: S1Grid
-    points = None  # type: Vector3d
-
-    def __init__(self, theta_grid: S1Grid, rho_grid: S1Grid):
-        self.theta_grid = theta_grid
-        self.rho_grid = rho_grid
-        theta = np.tile(theta_grid.points, rho_grid.points.shape)
-        rho = rho_grid.points
-        v = Vector3d.from_polar(theta, rho)
-        self.points = v
+class TestEuler:
+    def test_good_array__init__(self):
+        good_array = np.asarray([1,0,0])
+        assert isinstance(Euler(good_array),Euler)
