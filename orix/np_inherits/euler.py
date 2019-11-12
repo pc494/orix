@@ -69,8 +69,7 @@ class Euler():
         self.data = np.deg2rad(self.data) #for the transform operation
         for i,row in enumerate(self.data):
             temp_vect, temp_angle = euler2axangle(row[0],row[1],row[2],self.axis_convention)
-            if (temp_angle > np.pi) or (temp_angle < 0): #restricting to the range (0,pi)
-                temp_vect,temp_angle  = convert_axangle_to_correct_range(temp_vect,temp_angle)
+            temp_vect,temp_angle  = convert_axangle_to_correct_range(temp_vect,temp_angle)
             for j in [0,1,2]:
                 stored_axangle[i,j] = temp_vect[j]
             stored_axangle[i,3] = temp_angle #in radians!
