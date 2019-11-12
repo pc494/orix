@@ -28,6 +28,7 @@ class Euler():
     """
     def __init__(self,data,axis_convention='rzxz'):
         self.data = data
+        self.axis_convention = axis_convention
         # check the dimensions
         # check all angles less than 360
         # axis_convention
