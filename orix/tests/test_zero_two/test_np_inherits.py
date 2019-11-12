@@ -49,12 +49,24 @@ class TestAxAngle:
             axang.data[:,0] = 3
             axang._check_data()
 
-
-
-
-
-
 class TestEuler:
-    def test_good_array__init__(self):
-        good_array = np.asarray([1,0,0])
+    @pytest.fixture()
+    def good_array(self):
+        return np.asarray([[32,80,21],
+                           [40,10,11]])
+    def test_good_array__init__(self,good_array):
         assert isinstance(Euler(good_array),Euler)
+
+    @pytest.mark.xfail(raises = ValueError, strict=True)
+    class TestCorruptingData:
+        @pytest.fixture()
+        def euler(self,good_array):
+            return Euler(good_array)
+
+        def test_bad_shape(self,euler):
+            euler.data = euler.data[:,:2]
+            euler._check_data()
+
+        def test_dumb_angle(self,euler):
+            euler.data[0,0] = 700
+            euler._check_data()
