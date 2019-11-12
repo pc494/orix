@@ -27,6 +27,7 @@ setup(
         "numpy",
         "scipy",
         "matplotlib",
+        "transforms3d"
     ],
     package_data={
         "": ["LICENSE", "readme.rst"],
