@@ -20,30 +20,12 @@ import numpy as np
 
 from transforms3d.euler import euler2axangle
 
-def convert_axangle_to_correct_range(vector,angle):
-    """
-    This repo uses axis-angle pairs between (0,pi) - however often wider
-    ranges are used, most common are (0,2pi) and (-pi,pi), this function corrects
-    for these
-    """
-    if (angle >= 0) and (angle < np.pi): #input in the desired convention
-        pass
-    elif (angle >= -np.pi) and (angle < 0):
-        vector = np.multiply(vector,-1)
-        angle  = angle * -1
-    elif (angle >= np.pi) and (angle < 2*np.pi):
-        vector = np.multiply(vector,-1)
-        angle = 2*np.pi - angle
-    else:
-        raise ValueError("You have an axis-angle angle outside of acceptable ranges")
-
-    return vector,angle
 class Euler():
     """
     Class storing rotations as euler angles.
     Each row reads as [alpha,beta,gamma], where alpha, beta and gamma are rotations
-    in degrees in the convention specified by Euler.axis_conventions
-    as defined in transforms3d, remember that Euler angles are difficult.
+    in degrees around the axes specified by Euler.axis_conventions
+    as defined in transforms3d. Please always remember that Euler angles are difficult.
     """
     def __init__(self,data,axis_convention='rzxz'):
         self.data = data.astype('float')
@@ -62,7 +44,13 @@ class Euler():
         return None
 
     def to_AxAngle(self):
-        from orix.np_inherits.axangle import AxAngle
+        """ Converts an Euler object to an AxAngle object
+
+        Returns
+        -------
+        axangle : orix.AxAngle object
+        """
+        from orix.np_inherits.axangle import AxAngle,convert_axangle_to_correct_range
         self._check_data()
         stored_axangle = np.ones((self.data.shape[0],4))
         self.data = np.deg2rad(self.data) #for the transform operation

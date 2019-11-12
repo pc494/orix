@@ -19,6 +19,25 @@
 import numpy as np
 from transforms3d.euler import axangle2euler
 
+def convert_axangle_to_correct_range(vector,angle):
+    """
+    This repo uses axis-angle pairs between (0,pi) - however often wider
+    ranges are used, most common are (0,2pi) and (-pi,pi), this function corrects
+    for these
+    """
+    if (angle >= 0) and (angle < np.pi): #input in the desired convention
+        pass
+    elif (angle >= -np.pi) and (angle < 0):
+        vector = np.multiply(vector,-1)
+        angle  = angle * -1
+    elif (angle >= np.pi) and (angle < 2*np.pi):
+        vector = np.multiply(vector,-1)
+        angle = 2*np.pi - angle
+    else:
+        raise ValueError("You have an axis-angle angle outside of acceptable ranges")
+
+    return vector,angle
+
 
 class AxAngle():
     """
@@ -40,7 +59,7 @@ class AxAngle():
             raise ValueError("Your data is not in the correct shape")
         if np.any(self.data[:,3] < 0) or np.any(self.data[:,3] > np.pi):
             raise ValueError("Some of your angles lie outside of the range (0,pi)")
-        if not np.allclose(np.linalg.norm(self.data[:,:3][self.data[3] > 0],axis=1),1):
+        if not np.allclose(np.linalg.norm(self.data[:,:3][self.data[:,3] > 0],axis=1),1):
             raise ValueError("You no longer have normalised direction vectors")
         return None
 
