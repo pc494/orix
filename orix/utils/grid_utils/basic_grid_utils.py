@@ -34,7 +34,7 @@ def create_linearly_spaced_array_in_szxz(resolution):
          https://iopscience.iop.org/article/10.1088/0965-0393/23/8/083501/meta
     """
 
-    num_steps = 360/resolution
+    num_steps = int(360/resolution + 0.5)
     alpha = np.linspace(0,360,step=num_steps,endpoint=False)
     beta  = np.linspace(0,180,step=num_steps/2,endpoint=False)
     gamma = np.linspace(0,360,step=num_steps,endpoint=False)
