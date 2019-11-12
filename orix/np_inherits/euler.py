@@ -20,27 +20,24 @@ import numpy as np
 
 from transforms3d.euler import euler2axangle
 
-
-def convert_axangle_to_correct_range(vector, angle):
+def convert_axangle_to_correct_range(vector,angle):
     """
     This repo uses axis-angle pairs between (0,pi) - however often wider
     ranges are used, most common are (0,2pi) and (-pi,pi), this function corrects
     for these
     """
-    if (angle > 0) and (angle < np.pi):  # input in the desired convention
+    if (angle >= 0) and (angle < np.pi): #input in the desired convention
         pass
-    elif (angle > -np.pi) and (angle < 0):
-        vector = np.multiply(vector, -1)
-        angle = angle * -1
-    elif (angle > np.pi) and (angle < 2 * np.pi):
-        vector = np.multiply(vector, -1)
-        angle = 2 * np.pi - angle
+    elif (angle >= -np.pi) and (angle < 0):
+        vector = np.multiply(vector,-1)
+        angle  = angle * -1
+    elif (angle >= np.pi) and (angle < 2*np.pi):
+        vector = np.multiply(vector,-1)
+        angle = 2*np.pi - angle
     else:
         raise ValueError("You have an axis-angle angle outside of acceptable ranges")
 
-    return vector, angle
-
-
+    return vector,angle
 class Euler():
     """
     Class storing rotations as euler angles.
@@ -48,12 +45,10 @@ class Euler():
     in degrees in the convention specified by Euler.axis_conventions
     as defined in transforms3d, remember that Euler angles are difficult.
     """
-
-    def __init__(self, data, axis_convention='rzxz'):
+    def __init__(self,data,axis_convention='rzxz'):
         self.data = data.astype('float')
         self.axis_convention = axis_convention
-        # check the dimensions
-        # check all angles less than 360
+        self._check_data()
         return None
 
     def _check_data(self):
@@ -69,16 +64,16 @@ class Euler():
     def to_AxAngle(self):
         from orix.np_inherits.axangle import AxAngle
         self._check_data()
-        stored_axangle = np.ones((self.data.shape[0], 4))
-        self.data = np.deg2rad(self.data)  # for the transform operation
-        for i, row in enumerate(self.data):
-            temp_vect, temp_angle = euler2axangle(row[0], row[1], row[2], self.axis_convention)
-            temp_vect, temp_angle = convert_axangle_to_correct_range(temp_vect, temp_angle)
-            for j in [0, 1, 2]:
-                stored_axangle[i, j] = temp_vect[j]
-            stored_axangle[i, 3] = temp_angle  # in radians!
+        stored_axangle = np.ones((self.data.shape[0],4))
+        self.data = np.deg2rad(self.data) #for the transform operation
+        for i,row in enumerate(self.data):
+            temp_vect, temp_angle = euler2axangle(row[0],row[1],row[2],self.axis_convention)
+            temp_vect,temp_angle  = convert_axangle_to_correct_range(temp_vect,temp_angle)
+            for j in [0,1,2]:
+                stored_axangle[i,j] = temp_vect[j]
+            stored_axangle[i,3] = temp_angle #in radians!
 
-        self.data = np.rad2deg(self.data)  # leaves our eulers safe and sound
+        self.data = np.rad2deg(self.data) #leaves our eulers safe and sound
         return AxAngle(stored_axangle)
 
     def to_Quat(self):
