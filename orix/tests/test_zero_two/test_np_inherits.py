@@ -26,10 +26,15 @@ class TestAxAngle:
     @pytest.fixture()
     def good_array(self):
         return np.asarray([[1,0,0,1],
-                             [0,1,0,1]])
+                             [0,1,0,1.1]])
 
     def test_good_array__init__(self,good_array):
         assert isinstance(AxAngle(good_array),AxAngle)
+
+    def test_remove_large_rotations(self,good_array):
+        axang = AxAngle(good_array)
+        axang.remove_large_rotations(1.05) #removes 1 rotations
+        assert axang.data.shape == (1,4)
 
     @pytest.mark.xfail(raises = ValueError, strict=True)
     class TestCorruptingData:
