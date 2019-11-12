@@ -17,7 +17,10 @@
 # along with orix.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy as np
-import transforms3d
+
+from orix.np_inherits.axangle import AxAngle
+
+from transforms3d.euler import euler2axangle
 
 class Euler():
     """
@@ -44,8 +47,17 @@ class Euler():
         return None
 
     def to_AxAngle(self):
-        _check_data(self)
-        pass
+        self._check_data()
+        stored_axangle = np.ones((self.data.shape[0],4))
+        self.data = np.deg2rad(self.data) #for the transform operation
+        for i,row in enumerate(self.data):
+            temp_vect, temp_angle = euler2axangle(row[0],row[1],row[2],self.axis_convention)
+            for j in [0,1,2]:
+                stored_axangle[i,j] = temp_vect[j]
+            stored_axangle[i,3] = temp_angle #in radians!
+
+        self.data = np.rad2deg(self.data) #leaves our eulers safe and sound
+        return AxAngle(stored_axangle)
 
     def to_Quat(self):
         pass
