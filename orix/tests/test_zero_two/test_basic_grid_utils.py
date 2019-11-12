@@ -32,4 +32,4 @@ def test_linearly_spaced_array_in_szxz():
     grid = create_linearly_spaced_array_in_szxz(resolution=3.75)
     assert isinstance(grid,Euler)
     assert grid.axis_convention == 'szxz'
-    assert grid.data.shape == (442368,3) #is this the wrong way around?
+    assert grid.data.shape == (442368,3)
