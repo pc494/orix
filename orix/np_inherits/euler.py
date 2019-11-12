@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with orix.  If not, see <http://www.gnu.org/licenses/>.
 
-import numpy
+import numpy as np
 import transforms3d
 
 class Euler():
@@ -27,21 +27,24 @@ class Euler():
     as defined in transforms3d, remember that Euler angles are difficult.
     """
     def __init__(self,data,axis_convention='rzxz'):
-        self.data = data
+        self.data = data.astype('float')
         self.axis_convention = axis_convention
         # check the dimensions
         # check all angles less than 360
-        # axis_convention
         return None
 
     def _check_data(self):
         """ Checks data within Euler is acceptable, to be used at the start
         of methods """
-        # check dimensions
-        # check angles are all less than 360
+        if self.data.shape[1] != 3:
+            raise ValueError("Your data is not in the correct shape")
+        if np.any(self.data[:] > 360):
+            raise ValueError("Some of your angles are greater 360")
+
         return None
 
     def to_AxAngle(self):
+        _check_data(self)
         pass
 
     def to_Quat(self):
