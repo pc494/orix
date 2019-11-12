@@ -25,7 +25,7 @@ class AxAngle():
     and theta is the rotation angle in UNITS
     """
     def __init__(self,data):
-        self.data = data
+        self.data = data.astype('float')
         # check the dimensions
         # normalise
         return None

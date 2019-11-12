@@ -42,9 +42,9 @@ class TestAxAngle:
             axang._check_data()
 
         def test_dumb_angle(self,axang):
-            axang.data[:,3] = -0.5
+            axang.data[0,3] = -0.5
             axang._check_data()
-            
+
         def test_denormalised(self,axang):
             axang.data[:,0] = 3
             axang._check_data()
