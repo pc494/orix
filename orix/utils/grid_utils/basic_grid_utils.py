@@ -19,7 +19,7 @@
 import numpy as np
 from itertools import product
 
-from orix.numpy_inherits.euler import Euler
+from orix.np_inherits.euler import Euler
 
 def create_linearly_spaced_array_in_szxz(resolution):
     """
@@ -35,9 +35,9 @@ def create_linearly_spaced_array_in_szxz(resolution):
     """
 
     num_steps = int(360/resolution + 0.5)
-    alpha = np.linspace(0,360,step=num_steps,endpoint=False)
-    beta  = np.linspace(0,180,step=num_steps/2,endpoint=False)
-    gamma = np.linspace(0,360,step=num_steps,endpoint=False)
+    alpha = np.linspace(0,360,num=num_steps,endpoint=False)
+    beta  = np.linspace(0,180,num=num_steps/2,endpoint=False)
+    gamma = np.linspace(0,360,num=num_steps,endpoint=False)
     z = np.asarray(list(product(alpha, beta, gamma)))
     return Euler(z,axis_convention='szxz')
 

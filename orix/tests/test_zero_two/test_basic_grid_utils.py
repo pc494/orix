@@ -19,10 +19,11 @@
 import pytest
 import numpy as np
 
-from orix.utils.grid_utils.basic_grid_utils import create_linearly_spaced_array_in_szxz,select_fundemental_zone,reduce_to_fundemental_zone
 from orix.np_inherits.euler import Euler
+from orix.utils.grid_utils.basic_grid_utils import create_linearly_spaced_array_in_szxz,select_fundemental_zone,reduce_to_fundemental_zone
 
-def test_linearly_space_array_in_szxz():
+
+def test_linearly_spaced_array_in_szxz():
     """ From definition, a resolution of 1.5 will give us:
         Two sides of length = 240
         One side of length  = 120
