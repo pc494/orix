@@ -33,10 +33,31 @@ def create_linearly_spaced_array_in_szxz(resolution):
     [1]  D Rowenhorst et al 2015 Modelling Simul. Mater. Sci. Eng.23 083501
          https://iopscience.iop.org/article/10.1088/0965-0393/23/8/083501/meta
     """
-    
+
     num_steps = 360/resolution
     alpha = np.linspace(0,360,step=num_steps,endpoint=False)
     beta  = np.linspace(0,180,step=num_steps/2,endpoint=False)
     gamma = np.linspace(0,360,step=num_steps,endpoint=False)
     z = np.asarray(list(product(alpha, beta, gamma)))
     return Euler(z,axis_convention='szxz')
+
+def select_fundemental_zone(space_group_number):
+    """
+    Parameters
+    ----------
+    space_group_number : int
+    """
+
+def reduce_to_fundemental_zone(data,fundemental_zone):
+    """
+    Parameters
+    ----------
+    data :
+
+    fundemental_zone :
+
+    Returns
+    -------
+    reduced_data :
+
+    """

@@ -18,7 +18,7 @@
 
 import numpy as np
 
-from . import create_linearly_spaced_array_in_szxz
+from basic_grid_utils import create_linearly_spaced_array_in_szxz, select_fundemental_zone, reduce_to_fundemental_zone
 
 
 def get_local_grid(center,max_rotation,resolution):
@@ -46,12 +46,12 @@ def get_local_grid(center,max_rotation,resolution):
     # convert to rzxz
     return None
 
-def get_fundemental_zone_grid(symmetry,resolution,center=(0,0,0)):
+def get_fundemental_zone_grid(space_group_number,resolution,center=(0,0,0)):
     """
     Parameters
     ----------
 
-    symmetry :
+    space_group_number : int
 
 
     resolution : float
@@ -64,7 +64,9 @@ def get_fundemental_zone_grid(symmetry,resolution,center=(0,0,0)):
         Returns
     """
     raw_grid = create_linearly_spaced_array_in_szxz(resolution)
-    # remove non fundemental zone (ideally keeping as much of the final rotation as possible)
+    raw_grid_ax_angle = raw_grid.to_AxAngle()
+    fz = select_fundemental_zone(space_group_number)
+    fz_grid = reduce_to_fundemental_zone(raw_grid_axangle,fz)
     # rotate to the center
     # convert to rzxz
     return None
