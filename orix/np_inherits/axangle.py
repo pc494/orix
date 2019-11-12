@@ -40,7 +40,8 @@ class AxAngle():
             raise ValueError("Your data is not in the correct shape")
         if np.any(self.data[:,3] < 0) or np.any(self.data[:,3] > np.pi):
             raise ValueError("Some of your angles lie outside of the range (0,pi)")
-        if not np.allclose(np.linalg.norm(self.data[:,:3],axis=1),1):
+
+        if not np.allclose(np.linalg.norm(self.data[:,:3][self.data[3] > 0],axis=1),1):
             raise ValueError("You no longer have normalised direction vectors")
         return None
 
