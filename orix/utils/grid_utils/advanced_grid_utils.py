@@ -18,7 +18,7 @@
 
 import numpy as np
 
-from basic_grid_utils import create_linearly_spaced_array_in_szxz, select_fundemental_zone, reduce_to_fundemental_zone
+from orix.utils.grid_utils.basic_grid_utils import create_linearly_spaced_array_in_szxz, select_fundemental_zone, reduce_to_fundemental_zone
 
 
 def get_local_grid(center,max_rotation,resolution):
@@ -40,10 +40,11 @@ def get_local_grid(center,max_rotation,resolution):
     -------
     """
     raw_grid = create_linearly_spaced_array_in_szxz(resolution)
-    # convert to AxAngle
-    # Remove the big angles
+    raw_grid_axangle = raw_grid.to_AxAngle()
+    raw_grid_axangle.remove_large_rotations(max_rotation)
     # rotate to the center (check this doesn't reduce our volume saving from szxz)
-    # convert to rzxz
+    returnable_euler = raw_grid_axangle.to_Euler(axis_convention='rzxz')
+    #figure out the final return style.
     return None
 
 def get_fundemental_zone_grid(space_group_number,resolution,center=(0,0,0)):

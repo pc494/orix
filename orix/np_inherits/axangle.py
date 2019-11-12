@@ -17,6 +17,8 @@
 # along with orix.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy as np
+from transforms3d.euler import axangle2euler
+
 
 class AxAngle():
     """
@@ -40,3 +42,32 @@ class AxAngle():
         if not np.allclose(np.linalg.norm(self.data[:,:3],axis=1),1):
             raise ValueError("You no longer have normalised direction vectors")
         return None
+
+    def remove_large_rotations(self,threshold_angle):
+        """
+
+        Parameters
+        ----------
+        thereshold_angle : float
+            angle in radians
+
+        Returns
+        -------
+
+        None, this function operates in place
+        """
+        self._check_data()
+        self.data = self.data[self.data[:,3] < threshold_angle]
+        return None
+
+    def to_Euler(self,axis_convention):
+        from orix.np_inherits.euler import Euler
+        self._check_data()
+        stored_euler = np.ones((self.data.shape[0],3))
+        for i,row in enumerate(self.data):
+            a_array = axangle2euler(row[:3],row[3],axis_convention)
+            for j in [0,1,2]:
+                stored_euler[i,j] = a_array[j]
+
+        stored_euler = np.rad2deg(stored_euler)
+        return Euler(stored_euler,axis_convention)

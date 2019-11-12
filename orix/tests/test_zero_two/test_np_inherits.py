@@ -26,10 +26,15 @@ class TestAxAngle:
     @pytest.fixture()
     def good_array(self):
         return np.asarray([[1,0,0,1],
-                             [0,1,0,1]])
+                             [0,1,0,1.1]])
 
     def test_good_array__init__(self,good_array):
         assert isinstance(AxAngle(good_array),AxAngle)
+
+    def test_remove_large_rotations(self,good_array):
+        axang = AxAngle(good_array)
+        axang.remove_large_rotations(1.05) #removes 1 rotations
+        assert axang.data.shape == (1,4)
 
     @pytest.mark.xfail(raises = ValueError, strict=True)
     class TestCorruptingData:
@@ -49,12 +54,30 @@ class TestAxAngle:
             axang.data[:,0] = 3
             axang._check_data()
 
-
-
-
-
-
 class TestEuler:
-    def test_good_array__init__(self):
-        good_array = np.asarray([1,0,0])
+    @pytest.fixture()
+    def good_array(self):
+        return np.asarray([[32,80,21],
+                           [40,10,11]])
+    def test_good_array__init__(self,good_array):
         assert isinstance(Euler(good_array),Euler)
+
+    def test_toAxangle(self,good_array):
+        """ Conventions are grim, so only test the code elements """
+        axang = Euler(good_array,axis_convention='szxz').to_AxAngle()
+        assert isinstance(axang,AxAngle)
+        axang._check_data()
+
+    @pytest.mark.xfail(raises = ValueError, strict=True)
+    class TestCorruptingData:
+        @pytest.fixture()
+        def euler(self,good_array):
+            return Euler(good_array)
+
+        def test_bad_shape(self,euler):
+            euler.data = euler.data[:,:2]
+            euler._check_data()
+
+        def test_dumb_angle(self,euler):
+            euler.data[0,0] = 700
+            euler._check_data()
