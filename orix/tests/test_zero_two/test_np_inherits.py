@@ -23,9 +23,36 @@ from orix.np_inherits.axangle import AxAngle
 from orix.np_inherits.euler import Euler
 
 class TestAxAngle:
-    def test_good_array__init__(self):
-        good_array = np.asarray([1,0,0,1])
+    @pytest.fixture()
+    def good_array(self):
+        return np.asarray([[1,0,0,1],
+                             [0,1,0,1]])
+
+    def test_good_array__init__(self,good_array):
         assert isinstance(AxAngle(good_array),AxAngle)
+
+    @pytest.mark.xfail(raises = ValueError, strict=True)
+    class TestCorruptingData:
+        @pytest.fixture()
+        def axang(self,good_array):
+            return AxAngle(good_array)
+
+        def test_bad_shape(self,axang):
+            axang.data = axang.data[:,:2]
+            axang._check_data()
+
+        def test_dumb_angle(self,axang):
+            axang.data[0,3] = -0.5
+            axang._check_data()
+
+        def test_denormalised(self,axang):
+            axang.data[:,0] = 3
+            axang._check_data()
+
+
+
+
+
 
 class TestEuler:
     def test_good_array__init__(self):
