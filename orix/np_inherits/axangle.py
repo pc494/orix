@@ -26,7 +26,8 @@ class AxAngle():
     as [vx,vy,vz,theta], where [vx,vy,vz] is the rotation axis (normalised)
     and theta is the rotation angle in UNITS
     """
-    def __init__(self,data):
+
+    def __init__(self, data):
         self.data = data.astype('float')
         # check the dimensions
         # normalise
@@ -37,13 +38,13 @@ class AxAngle():
         acceptable angles and normalised vectors """
         if self.data.shape[1] != 4:
             raise ValueError("Your data is not in the correct shape")
-        if np.any(self.data[:,3] < 0) or np.any(self.data[:,3] > np.pi):
+        if np.any(self.data[:, 3] < 0) or np.any(self.data[:, 3] > np.pi):
             raise ValueError("Some of your angles lie outside of the range (0,pi)")
-        if not np.allclose(np.linalg.norm(self.data[:,:3],axis=1),1):
+        if not np.allclose(np.linalg.norm(self.data[:, :3], axis=1), 1):
             raise ValueError("You no longer have normalised direction vectors")
         return None
 
-    def remove_large_rotations(self,threshold_angle):
+    def remove_large_rotations(self, threshold_angle):
         """
 
         Parameters
@@ -57,17 +58,17 @@ class AxAngle():
         None, this function operates in place
         """
         self._check_data()
-        self.data = self.data[self.data[:,3] < threshold_angle]
+        self.data = self.data[self.data[:, 3] < threshold_angle]
         return None
 
-    def to_Euler(self,axis_convention):
+    def to_Euler(self, axis_convention):
         from orix.np_inherits.euler import Euler
         self._check_data()
-        stored_euler = np.ones((self.data.shape[0],3))
-        for i,row in enumerate(self.data):
-            a_array = axangle2euler(row[:3],row[3],axis_convention)
-            for j in [0,1,2]:
-                stored_euler[i,j] = a_array[j]
+        stored_euler = np.ones((self.data.shape[0], 3))
+        for i, row in enumerate(self.data):
+            a_array = axangle2euler(row[:3], row[3], axis_convention)
+            for j in [0, 1, 2]:
+                stored_euler[i, j] = a_array[j]
 
         stored_euler = np.rad2deg(stored_euler)
-        return Euler(stored_euler,axis_convention)
+        return Euler(stored_euler, axis_convention)
