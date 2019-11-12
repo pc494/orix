@@ -24,12 +24,12 @@ from orix.utils.grid_utils.basic_grid_utils import create_linearly_spaced_array_
 
 
 def test_linearly_spaced_array_in_szxz():
-    """ From definition, a resolution of 1.5 will give us:
-        Two sides of length = 240
-        One side of length  = 120
-        And thus a total of 240 * 240 * 120 = 6912000 points
+    """ From definition, a resolution of 3.75 will give us:
+        Two sides of length = 96
+        One side of length  = 48
+        And thus a total of 96 * 96 * 48 = 442368 points
     """
-    grid = create_linearly_spaced_array_in_szxz(resolution=1.5)
+    grid = create_linearly_spaced_array_in_szxz(resolution=3.75)
     assert isinstance(grid,Euler)
     assert grid.axis_convention == 'szxz'
-    assert grid.data.shape == (6912000,3)
+    assert grid.data.shape == (442368,3)
