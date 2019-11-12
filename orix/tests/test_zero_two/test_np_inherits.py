@@ -81,3 +81,18 @@ class TestEuler:
         def test_dumb_angle(self,euler):
             euler.data[0,0] = 700
             euler._check_data()
+
+def test_interconversion_euler_axangle():
+    """
+    This function checks (with random numbers) that .to_Axangle() and .to_Euler()
+    go back and forth correctly
+    """
+    axes = np.random.random_sample((1000,3))
+    axes = np.divide(axes,np.linalg.norm(axes,axis=1).reshape(1000,1))
+    assert np.allclose(np.linalg.norm(axes,axis=1),1) #check for input normalisation
+    angles = np.multiply(np.random.random_sample((1000,1)),np.pi)
+    axangle   = AxAngle(np.concatenate((axes,angles),axis=1))
+    transform = AxAngle(np.concatenate((axes,angles),axis=1))
+    e = transform.to_Euler(axis_convention='szxz')
+    transform_back = e.to_AxAngle()
+    assert np.allclose(transform_back.data,axangle.data)
