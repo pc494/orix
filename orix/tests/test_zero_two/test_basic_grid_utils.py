@@ -35,7 +35,11 @@ def test_linearly_spaced_array_in_szxz():
     assert grid.data.shape == (442368,3)
 
 def test_preservation_of_reduced_rotation_space():
-    """ Needs clear docstrings """
+    """ Pyxem's template matching implementation (from probably 0.11.0 onwards)
+        has a major speed up based on reducing the data size due to a [a,b,c]
+        and [a,b,c+d] being similar in the 'szxz' convention. This test confirms
+        that that data reduction remains even after transfers between representations 
+    """
     grid = create_linearly_spaced_array_in_szxz(resolution=7)
     count_of_specials = np.unique(grid.data[:,:2],axis=0).shape[0]
     grid_axangle = grid.to_AxAngle()
