@@ -47,7 +47,45 @@ def select_fundemental_zone(space_group_number):
     Parameters
     ----------
     space_group_number : int
+
+    Returns
+    -------
+    point_group_str : str
+        The proper point group string in --- convention
+
+    Notes
+    -----
+    This function enumerates the list on https://en.wikipedia.org/wiki/List_of_space_groups
+    Point groups (32) are converted to proper point groups (11) using the Schoenflies
+    representations given in that table.
     """
+    if space_group_number in [1,2]:
+        return '1'   #triclinic
+    if 2 < space_group_number < 16:
+        return '2'   #monoclinic
+    if 15 < space_group_number < 75:
+        return '222' #orthorhomic
+    if 74 < space_group_number < 143: #tetragonal
+        if (74 < space_group_number < 89) or (99 < space_group_number < 110):
+            return '4'  #cyclic
+        else:
+            return '422' #dihedral
+    if 142 < space_group_number < 167: #trigonal
+        if 142 < space_group_number < 148 or 156 < space_group_number < 161:
+            return '3' #cyclic
+        else:
+            return '32' #dihedral
+    if 167 < space_group_number < 194: #hexagonal
+        if 167 < space_group_number <176 or space_group_number in [183,184,185,186]:
+            return '6' #cyclic
+        else:
+            return '622'#dihedral
+    if 193 < space_group_number < 231: #cubic
+        if 193 < space_group_number < 207 or space_group_number in [215,216,217,218,219,220]:
+            return '432' #oct
+        else:
+            return '23' #tet
+
 
 def reduce_to_fundemental_zone(data,fundemental_zone):
     """
@@ -55,10 +93,23 @@ def reduce_to_fundemental_zone(data,fundemental_zone):
     ----------
     data :
 
-    fundemental_zone :
+    fundemental_zone : str
+        A proper point group, allowed values are:
+            '1','2','222','4','422','3','32','6','622','432','23'
 
     Returns
     -------
-    reduced_data :
+    reduced_data : orix.AxAngle
 
     """
+
+    # we know what are max angles are, so save some time by cutting out chunks
+    if fundemental_zone == '432':
+        self.data = self.data[self.data[:,3] < np.deg2rad(66)]
+    elif fundemental_zone == '222':
+        self.data = self.data[self.data[:,3] < np.deg2rad(121)]
+    elif fundemental_zone in ['23','622','32','422']:
+        self.data = self.data[self.data[:,3] < np.deg2rad(106)]
+
+    # convert to rodrigo-frank
+    # call FZ functionality
