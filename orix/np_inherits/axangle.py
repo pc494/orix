@@ -47,9 +47,7 @@ class AxAngle():
     """
     def __init__(self,data):
         self.data = data.astype('float')
-        if self.data.shape[1] != 4:
-            raise ValueError("Your data is not in the correct shape")
-        # normalise
+        self._check_data()
         return None
 
     def _check_data(self):
@@ -65,16 +63,17 @@ class AxAngle():
 
     def remove_large_rotations(self,threshold_angle):
         """
-        Removes rotations that are too large.
+        Removes rotations that above a threshold angle
 
         Parameters
         ----------
         thereshold_angle : float
-            angle in radians
+            angle in radians, rotations larger than this are removed
 
         Returns
         -------
-        None, this function operates in place
+        None :
+            This functions operates in place
         """
         self._check_data()
         self.data = self.data[self.data[:,3] < threshold_angle]
@@ -82,13 +81,12 @@ class AxAngle():
 
     def to_Euler(self,axis_convention):
         """
-        Produces euler angles from the axis-angle pairs. Beware euler angles
-        are generally difficult to work with.
+        Produces euler angles from the axis-angle pairs.
 
         Parameters
         ----------
         axis_convention : str
-            transforms3d complient euler string
+            transforms3d compliant euler string
 
         Returns
         -------
