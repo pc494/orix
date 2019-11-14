@@ -28,7 +28,10 @@ def numpy_bounding_plane(vector):
     pass
 
 def cyclic_group(data,order):
-    pass
+    """ By CONVENTION the rotation axis is the cartesian z axis"""
+    z_distance = np.multiply(data[2],data[3])
+    z_distance = np.nan_to_num(z_distance) #case pi rotation, 0 z component of vector
+    return data[z_distance < (2*np.pi)/order]
 
 def dihedral_group(data,order):
     pass
