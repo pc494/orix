@@ -18,20 +18,31 @@
 
 def axangle2rodrigo_frank(z):
     # converts to [vx,vy,vz,RF]
+    # RF = tan(omega/2)
     z[:,3] = np.tan(np.divide(z[:,3],2))
     return z
 
 def rodrigo_frank_to_axangle():
     pass
 
-def numpy_bounding_plane(vector):
-    pass
+def numpy_bounding_plane(data,vector,distance):
+    """
+
+    Raises
+    -----
+    ValueError : This function is unsafe if pi rotations are preset
+    """
+    if not np.all(np.is_finite(data)):
+        raise ValueError("pi rotations, be aware")
+        
+    return data
 
 def cyclic_group(data,order):
-    """ By CONVENTION the rotation axis is the cartesian z axis"""
+    """ By CONVENTION the rotation axis is the cartesian z axis
+    Note: Special case, as pi rotations are present we avoid a call to numpy_bounding_plane"""
     z_distance = np.multiply(data[2],data[3])
     z_distance = np.abs(np.nan_to_num(z_distance)) #case pi rotation, 0 z component of vector
-    return data[z_distance < (2*np.pi)/order]
+    return data[z_distance < np.tan(np.pi/order)]
 
 def dihedral_group(data,order):
     pass
@@ -40,7 +51,8 @@ def octahedral_group(data):
     pass
 
 def tetragonal_group(data):
-    pass
+    for direction in [(1,1,1),(1,1,-1)]: #etc
+        data = numpy_bounding_plane()
 
 def rf_fundemental_zone(axangledata,point_group_str):
     rf = axangle2rodrigo_frank(axangledata)
