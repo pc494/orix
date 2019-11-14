@@ -16,9 +16,10 @@
 # You should have received a copy of the GNU General Public License
 # along with orix.  If not, see <http://www.gnu.org/licenses/>.
 
-def axangle2rodrigo_frank():
+def axangle2rodrigo_frank(z):
     # converts to [vx,vy,vz,RF]
-    pass
+    z[:,3] = np.tan(np.divide(z[:,3],2))
+    return z
 
 def rodrigo_frank_to_axangle():
     pass
