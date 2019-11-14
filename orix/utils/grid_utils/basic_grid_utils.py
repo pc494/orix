@@ -70,7 +70,7 @@ def select_fundemental_zone(space_group_number):
             return '4'  #cyclic
         else:
             return '422' #dihedral
-    if 142 < space_group_number < 167: #trigonal
+    if 142 < space_group_number < 168: #trigonal
         if 142 < space_group_number < 148 or 156 < space_group_number < 161:
             return '3' #cyclic
         else:
