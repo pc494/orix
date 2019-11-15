@@ -39,6 +39,7 @@ def create_linearly_spaced_array_in_szxz(resolution):
     alpha = np.linspace(0,360,num=num_steps,endpoint=False)
     beta  = np.linspace(0,180,num=int(num_steps/2),endpoint=False)
     gamma = np.linspace(0,360,num=num_steps,endpoint=False)
+    #TODO: Remove Gimbal lock rotations, eg (100,0,0) == (50,0,50) etc
     z = np.asarray(list(product(alpha, beta, gamma)))
     return Euler(z,axis_convention='szxz')
 
@@ -112,5 +113,5 @@ def reduce_to_fundemental_zone(data,fundemental_zone):
     elif fundemental_zone in ['23','622','32','422']:
         self.data = self.data[self.data[:,3] < np.deg2rad(106)]
 
-    # convert to rodrigo-frank
+    #two paths, one via rzxz euler (dihedral and cyclic) and the RF for cubics
     # call FZ functionality
