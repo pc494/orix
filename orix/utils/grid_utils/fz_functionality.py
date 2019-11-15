@@ -16,17 +16,63 @@
 # You should have received a copy of the GNU General Public License
 # along with orix.  If not, see <http://www.gnu.org/licenses/>.
 
-def axangle2rodrigo_frank(z):
-    # converts to [vx,vy,vz,RF]
-    # RF = tan(omega/2)
+def axangle2rodrigues_frank(z):
+    """
+    Converts an AxAngle's data element into Rodrigues-Frank vectors
+
+    Parameters
+    ----------
+    z : np.array shape (n,4)
+        Axis Angle numpy array, with rotations between [0,pi]
+
+    Returns
+    -------
+    z : np.array shape (n,4)
+
+    Notes
+    -----
+    Mapping is [vx,vy,vz,omega] ---> [vx,vy,vz,RF]
+    where: RF = tan(omega/2) and has values [0,inf]
+    """
     z[:,3] = np.tan(np.divide(z[:,3],2))
     return z
 
 def rodrigo_frank_to_axangle():
-    pass
+    """
+    Inverse function of axangle2rodrigues_frank
+
+    Parameters
+    ----------
+    z : np.array shape (n,4)
+
+
+    Returns
+    -------
+    z : np.array shape (n,4)
+
+    Notes
+    -----
+    Mapping is [vx,vy,vz,RF] ---> [vx,vy,vz,omega]
+    where: RF = tan(omega/2) and has values [0,inf]
+    """
 
 def numpy_bounding_plane(data,vector,distance):
     """
+    Removes rotations that lie on the far side (from the origin) of a plane
+
+    Parameters
+    ----------
+    data :
+        Points to be considered for removal
+    vector :
+        Direction vector perpendicular to the plane under consideration
+    distance:
+        Shortest distance from origin to plane
+
+    Returns
+    -------
+    data :
+        With offending elements removed
 
     Raises
     -----
@@ -34,7 +80,7 @@ def numpy_bounding_plane(data,vector,distance):
     """
     if not np.all(np.is_finite(data)):
         raise ValueError("pi rotations, be aware")
-        
+
     return data
 
 def cyclic_group(data,order):
@@ -45,14 +91,16 @@ def cyclic_group(data,order):
     return data[z_distance < np.tan(np.pi/order)]
 
 def dihedral_group(data,order):
+    """ Use numpy bounding planes and info on Page 107 of Morawiec"""
     pass
 
 def octahedral_group(data):
+    """ Use numpy bounding planes and info on Page 107 of Morawiec"""
     pass
 
 def tetragonal_group(data):
-    for direction in [(1,1,1),(1,1,-1)]: #etc
-        data = numpy_bounding_plane()
+    """ Use numpy bounding planes and info on Page 107 of Morawiec"""
+    pass
 
 def rf_fundemental_zone(axangledata,point_group_str):
     rf = axangle2rodrigo_frank(axangledata)

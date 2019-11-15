@@ -25,6 +25,7 @@ def convert_axangle_to_correct_range(vector,angle):
     ranges are used, most common are (0,2pi) and (-pi,pi), this function corrects
     for these
     """
+    #TODO: Check how we deal with pi rotatins, as [1,0,0,pi] == [-1,0,0,pi]
     if (angle >= 0) and (angle < np.pi): #input in the desired convention
         pass
     elif (angle >= -np.pi) and (angle < 0):
